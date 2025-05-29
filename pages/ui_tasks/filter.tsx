@@ -27,7 +27,6 @@ const Filter = ({ emailprefix, setEmailprefix, status, setStatus, setPage, statu
       }}
     >
       <option value='not-success'>Estado ...</option>
-      <option value='all'>all</option>
       {statuses?.map(s => (
         <option key={s} value={s}>{s}</option>
       ))}
