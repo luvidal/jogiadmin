@@ -28,7 +28,7 @@ const TasksTable = ({
       </tr>
     </thead>
     <tbody>
-      {tasks.map(t => (
+      {tasks?.map(t => (
         <tr key={t.taskid} className='border-b'>
           <td className='min-h-10 py-2'>{t.email}</td>
           <td className='min-h-10 py-2'>{t.script}</td>
