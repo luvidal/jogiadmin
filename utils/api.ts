@@ -1,7 +1,6 @@
 
 const headers = (contentType = 'application/json', extra: Record<string, string> = {}) => ({
   'X-UserId': JSON.parse(localStorage.getItem('user') || '{}')?.userid || '',
-  //'X-Role': localStorage.getItem('role') || '',
   'Content-Type': contentType,
   ...extra,
 })

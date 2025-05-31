@@ -15,7 +15,6 @@ const Navigation = ({ selected, setContent, onToggleMenu }: any) => {
 
   const handleClick = (id: string) => {
     setContent(id)
-    localStorage.setItem('content', id)
   }
 
   return (
