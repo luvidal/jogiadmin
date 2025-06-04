@@ -1,6 +1,5 @@
-// components/TasksTable.tsx
 import Icon from '@/components/icon'
-import { ToolButton } from '@/components/toolbar'
+import ToolBar, { ToolButton } from '@/components/toolbar'
 
 const sticn: Record<string, { name: string; color: string }> = {
   success: { name: 'ThumbsUp', color: 'green' },
@@ -9,13 +8,13 @@ const sticn: Record<string, { name: string; color: string }> = {
   failed: { name: 'ThumbsDown', color: 'red' }
 }
 
-const TasksTable = ({
-  tasks,
-  reprocess
-}: {
+interface Props {
   tasks: any[]
   reprocess: (taskid: string) => void
-}) => (
+  manual: (taskid: string) => void
+} 
+
+const TasksTable = ({ tasks, reprocess, manual }: Props) => (
   <table className='w-full border-collapse'>
     <thead>
       <tr className='border-b'>
@@ -44,10 +43,18 @@ const TasksTable = ({
           <td className='min-h-10 py-2 text-center'>{t.retries}</td>
           <td className='min-h-10 py-2 text-center'>{t.date}</td>
           <td className='min-h-10 py-2 text-right'>
+            <ToolBar>
             <ToolButton
               icon='RefreshCw'
+              label='Insistir'
               onClick={() => reprocess(t.taskid)}
             />
+            <ToolButton
+              icon='Search'
+              label='Manual'
+              onClick={() => manual(t.taskid)}
+            />
+            </ToolBar>
           </td>
         </tr>
       ))}

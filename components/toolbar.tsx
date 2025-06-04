@@ -7,48 +7,46 @@ type ToolBarProps = {
 };
 
 const ToolBar = ({ children, className }: ToolBarProps) => (
-  <div className={`flex ${className || ''}`}>
+  <div
+    className={`flex ${className || ''}`}
+    onClick={e => e.stopPropagation()}
+  >
     {children}
   </div>
-);
+)
 
 export default ToolBar;
 
-type ToolButtonProps = {
+type ToolButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   icon: string
-  label?: string
+  label: string
+  onClick: () => void
   visible?: boolean
   invert?: boolean
-  disabled?: boolean
-  onClick: () => void
-} & React.ButtonHTMLAttributes<HTMLButtonElement>
+}
 
 export const ToolButton = ({
   icon,
   label,
   visible = true,
-  invert = false,
-  disabled = false,
   onClick,
+  invert = false,
   ...rest
-}: ToolButtonProps) => {
-  const base = 'flex h-[30px] items-center justify-center border rounded whitespace-nowrap px-2 -ml-px first:ml-0'
+}: ToolButtonProps & React.ButtonHTMLAttributes<HTMLButtonElement>) => {
+  const base = 'flex w-[32px] h-[32px] items-center justify-center border rounded px-2 -ml-px first:ml-0'
   const colors = invert
-    ? 'bg-gray-600 text-white border-gray-600 hover:bg-gray-500 disabled:text-gray-400 disabled:bg-gray-600 disabled:hover:bg-gray-600'
-    : 'bg-transparent text-gray-950 border-gray-300 hover:bg-gray-200 disabled:text-gray-400 disabled:bg-transparent disabled:hover:bg-transparent'
-
-  const width = label ? 'w-[30px] sm:w-[100px]' : 'w-[30px]'
+    ? 'bg-gray-600    text-white    border-gray-950 hover:bg-gray-500'
+    : 'bg-transparent text-gray-600 border-gray-300 hover:bg-gray-200'
 
   return visible ? (
     <button
       onClick={onClick}
-      disabled={disabled}
       aria-label={label}
-      className={`${base} ${colors} ${width}`}
+      title={label}
+      className={`${base} ${colors} ${rest.className ?? ''}`}
       {...rest}
     >
-      {icon && <Icon name={icon} size={11} />}
-      {label && <span className='hidden sm:inline text-xs ms-1 truncate'>{label}</span>}
+      <Icon name={icon} size={18} />
     </button>
   ) : null
 }
