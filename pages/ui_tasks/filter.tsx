@@ -4,10 +4,9 @@ interface Props {
   status: string
   setStatus: (s: string) => void
   setPage: (n: number) => void
-  statuses: string[]
 }
 
-const Filter = ({ emailprefix, setEmailprefix, status, setStatus, setPage, statuses }: Props) => (
+const Filter = ({ emailprefix, setEmailprefix, status, setStatus, setPage }: Props) => (
   <div className='flex gap-2'>
     <input
       className='border p-2 rounded w-1/2'
@@ -27,9 +26,10 @@ const Filter = ({ emailprefix, setEmailprefix, status, setStatus, setPage, statu
       }}
     >
       <option value='not-success'>Estado ...</option>
-      {statuses?.map(s => (
-        <option key={s} value={s}>{s}</option>
-      ))}
+      <option value='pending'>Pendiente</option>
+      <option value='running'>Corriendo</option>
+      <option value='success'>Exito</option>
+      <option value='failed'>Fracaso</option>
     </select>
   </div>
 )

@@ -31,8 +31,6 @@ const Tasks = () => {
     await patch(`tasks/${taskid}/reprocess`)
   }
 
-  const statuses = ['pending', 'running', 'success', 'failed']
-
   return (
     <div className='flex flex-col w-full h-full p-4 gap-4'>
       <Filter
@@ -41,7 +39,6 @@ const Tasks = () => {
         status={status}
         setStatus={setStatus}
         setPage={setPage}
-        statuses={statuses}
       />
       <TasksTable tasks={tasks} reprocess={reprocess} />
       <ToolBar className='mt-auto ml-auto'>
