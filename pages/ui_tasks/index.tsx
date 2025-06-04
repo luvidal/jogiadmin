@@ -9,7 +9,7 @@ const Tasks = () => {
   const [status, setStatus] = useState('')
   const [tasks, setTasks] = useState<any[]>([])
   const [page, setPage] = useState(0)
-  const limit = 20
+  const limit = 13
 
   useEffect(() => {
     post('tasks', { emailprefix, status, page, limit }).then(setTasks)
