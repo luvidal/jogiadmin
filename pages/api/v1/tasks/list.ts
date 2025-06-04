@@ -10,5 +10,4 @@ async function list(req: NextApiRequest, res: NextApiResponse) {
   res.status(200).json(rows)
 }
 
-
 export default list
