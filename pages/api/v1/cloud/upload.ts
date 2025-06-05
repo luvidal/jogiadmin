@@ -15,11 +15,6 @@ async function upload(req: NextApiRequest, res: NextApiResponse) {
   const values = { userid, uploadmethod, filename, mimetype, doctypeid, lastmodified, size, sizekb }
   const [{ cloudfileid }] = await execute('_cloud.sp_create_file', values)
 
-console.log('typeof buffer:', typeof buffer)
-console.log('is string:', typeof buffer === 'string')
-console.log('startsWith data:', typeof buffer === 'string' && buffer.slice(0, 20))
-
-
   await s3.send(new PutObjectCommand({
     Bucket: 'jogi-files',
     Key: `${userid}/${cloudfileid}`,
