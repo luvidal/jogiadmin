@@ -3,6 +3,7 @@ import ToolBar, { ToolButton } from '@/components/toolbar'
 import TasksTable from './taskstable'
 import Filter from './filter'
 import Manual from './manual'
+import Pager from '../../components/pager'
 import { post, patch } from '@/utils/api'
 
 const Tasks = () => {
@@ -49,18 +50,7 @@ const Tasks = () => {
         setPage={setPage}
       />
       <TasksTable tasks={tasks} reprocess={reprocess} manual={manual}/>
-      <ToolBar className='mt-auto ml-auto'>
-        <ToolButton icon='ChevronLeft' label='Más' onClick={() => setPage(p => Math.max(p - 1, 0))} />
-        <span className='flex items-center justify-center w-12 px-2 mx-1 rounded text-sm font-medium border border-gray-300 bg-white text-gray-700'>
-          {page + 1}
-        </span>
-        <ToolButton
-          icon='ChevronRight'
-          label='Menos'
-          onClick={() => setPage(p => p + 1)}
-          disabled={tasks?.length < limit}
-        />
-      </ToolBar>
+      <Pager page={page} setPage={setPage} hasNext={tasks.length >= limit} />
       {manualTask && <Manual task={manualTask} onClose={() => setManualTask(null)}/>}
     </div>
   )

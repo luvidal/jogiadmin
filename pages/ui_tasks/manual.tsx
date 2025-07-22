@@ -32,23 +32,23 @@ const Manual = ({ task, onClose }: Props) => {
     if (!file || loading) return
     setLoading(true)
     try {
-        const date = new Date().toISOString().slice(0, 10) // '2025-06-04'
-        const ext = file?.name.split('.').pop()
-        const filename = `${task?.script}_${date}.${ext}`
-        await upload('cloud', file, {
-            taskid: task?.taskid,
-            userid: task?.userid,
-            doctypeid: task?.doctypeid,
-            filename,
-            mimetype: file?.type,
-            size: file?.size,
-            lastmodified: file?.lastModified
-        })
-        onClose()
+      const date = new Date().toISOString().slice(0, 10) // '2025-06-04'
+      const ext = file?.name.split('.').pop()
+      const filename = `${task?.script}_${date}.${ext}`
+      await upload('cloud', file, {
+        taskid: task?.taskid,
+        userid: task?.userid,
+        doctypeid: task?.doctypeid,
+        filename,
+        mimetype: file?.type,
+        size: file?.size,
+        lastmodified: file?.lastModified
+      })
+      onClose()
     } catch (err) {
-        console.error('Upload error:', err)
+      console.error('Upload error:', err)
     } finally {
-        setLoading(false)
+      setLoading(false)
     }
   }
 
@@ -70,21 +70,33 @@ const Manual = ({ task, onClose }: Props) => {
   return (
     <Modal title={`Informe ${capitalize(task?.script)}`} onClose={onClose}>
       <div className='flex flex-col h-full gap-4 p-8'>
+        <div className='flex w-full items-center justify-between gap-4'>
+          <div className='text-sm font-medium w-16'>Task ID</div>
+          <div className='text-sm flex-1 truncate'>{task?.taskid}</div>
+          <ToolButton icon='Copy' label='Copiar' onClick={() => copy(task?.taskid)} />
+        </div>
         {url && (
-          <div className='flex items-center justify-between gap-4'>
-            <div className='text-sm font-medium w-28'>URL</div>
+          <div className='flex w-full items-center justify-between gap-4'>
+            <div className='text-sm font-medium w-16'>URL</div>
             <div className='text-sm flex-1 truncate'>{url}</div>
             <ToolButton icon='CornerUpRight' label='Navegar' onClick={() => goto(url)} />
           </div>
         )}
         <hr />
-        {Object.entries(context).map(([key, value]) => (
-          <div key={key} className='flex items-center justify-between gap-4'>
-            <div className='text-sm font-medium w-28'>{capitalize(key)}</div>
-            <div className='text-sm flex-1 truncate'>{value}</div>
-            <ToolButton icon='Copy' label={`Copiar ${key}`} onClick={() => copy(value)} />
-          </div>
-        ))}
+        <div className='flex justify-between'>
+          {Object.entries(context).map(([key, value]) => {
+            const isGroup = ['claveunica', 'rut', 'documento'].includes(key.toLowerCase())
+            const width = isGroup ? 'w-[calc(33%-1rem)]' : 'w-full'
+
+            return (
+              <div key={key} className={`flex items-center gap-2 ${width}`}>
+                <div className='text-sm font-medium'>{capitalize(key)}</div>
+                <div className='text-sm flex-1 truncate'>{value}</div>
+                <ToolButton icon='Copy' label={`Copiar ${key}`} onClick={() => copy(value)} />
+              </div>
+            )
+          })}
+        </div>
         <hr />
         <div
           onDrop={e => {
@@ -100,6 +112,7 @@ const Manual = ({ task, onClose }: Props) => {
         </div>
       </div>
     </Modal>
+
   )
 }
 

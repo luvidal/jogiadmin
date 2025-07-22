@@ -1,7 +1,7 @@
 import nodemailer from 'nodemailer'
 import { JSDOM } from 'jsdom'
 import DOMPurify from 'dompurify'
-import { htmlToText } from 'html-to-text'
+import mime from 'mime-types'
 
 const purify = DOMPurify(new JSDOM('').window)
 export const clean = (s: string) => purify.sanitize(s)
@@ -40,18 +40,31 @@ export async function execute<T = any>(procedure: string, params?: Record<string
     })
     if (!res.ok) throw new Error(await res.text())
     return (await res.json()).data || []
+
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err)
     console.error(`${procedure} error:`, msg)
-    throw new Error(isDev ? `${procedure} error: ${msg}` : `[${procedure}] Falló la conexión al servidor`)
+    throw new Error(`Error running ${procedure}: ${msg}`)
   }
 }
 
-export function stripHtml(html: string): string {
-  return htmlToText(html, {
-    wordwrap: false,
-    selectors: [
-      { selector: 'a', options: { hideLinkHrefIfSameAsText: true } },
-    ],
-  }).trim()
+export const uploadS3 = async (userid: string, doctypeid: string, filename: string, base64: string): Promise<void> => {
+  const buffer = Buffer.from(base64, 'base64')
+  const mimetype = mime.lookup(filename) || 'application/pdf'
+  const size = buffer.length
+  const sizekb = Math.ceil(size / 1024) + ' KB'
+  const uploadmethod = 'automatic'
+  const lastmodified = new Date().toISOString()
+  const values = { userid, uploadmethod, filename, mimetype, doctypeid, lastmodified, size, sizekb }
+
+  const [{ cloudfileid }] = await execute('_cloud.sp_create_file', values)
+
+  const { S3Client, PutObjectCommand } = await import('@aws-sdk/client-s3')
+  const s3 = new S3Client({})
+  await s3.send(new PutObjectCommand({
+    Bucket: 'jogi-files',
+    Key: `${userid}/${cloudfileid}`,
+    Body: buffer,
+    ContentType: mimetype,
+  }))
 }
