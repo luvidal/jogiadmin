@@ -49,6 +49,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         })
 
         res.status(200).json({ success: true, message: 'OK' })
+
     } catch (err: any) {
         const fallback = String(err?.message || err)
         await execute('_docbroker.sp_update_task_status', {
@@ -57,6 +58,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
             retries,
             returntext: fallback.slice(0, 500),
         })
+
         res.status(500).json({ success: false, message: 'Internal error', error: fallback })
     }
 }
