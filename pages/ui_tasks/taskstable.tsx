@@ -12,7 +12,7 @@ interface Props {
   tasks: any[]
   reprocess: (taskid: string) => void
   manual: (taskid: string) => void
-} 
+}
 
 const TasksTable = ({ tasks, reprocess, manual }: Props) => (
   <table className='w-full border-collapse'>
@@ -37,6 +37,8 @@ const TasksTable = ({ tasks, reprocess, manual }: Props) => (
                 size={18}
                 name={sticn[t.status]?.name}
                 color={sticn[t.status]?.color}
+                onClick={() => alert(t.returntext)}
+                className='cursor-pointer hover:opacity-80'
               />
             </div>
           </td>
@@ -44,16 +46,16 @@ const TasksTable = ({ tasks, reprocess, manual }: Props) => (
           <td className='min-h-10 py-2 text-center'>{t.date}</td>
           <td className='min-h-10 py-2 text-right'>
             <ToolBar>
-            <ToolButton
-              icon='RefreshCw'
-              label='Insistir'
-              onClick={() => reprocess(t.taskid)}
-            />
-            <ToolButton
-              icon='Search'
-              label='Manual'
-              onClick={() => manual(t.taskid)}
-            />
+              <ToolButton
+                icon='RefreshCw'
+                label='Insistir'
+                onClick={() => reprocess(t.taskid)}
+              />
+              <ToolButton
+                icon='Search'
+                label='Manual'
+                onClick={() => manual(t.taskid)}
+              />
             </ToolBar>
           </td>
         </tr>
