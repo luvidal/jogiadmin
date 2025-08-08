@@ -35,7 +35,7 @@ const Manual = ({ task, onClose }: Props) => {
       const date = new Date().toISOString().slice(0, 10) // '2025-06-04'
       const ext = file?.name.split('.').pop()
       const filename = `${task?.script}_${date}.${ext}`
-      await upload('cloud', file, {
+      await upload('cloud/upload', file, {
         taskid: task?.taskid,
         userid: task?.userid,
         doctypeid: task?.doctypeid,

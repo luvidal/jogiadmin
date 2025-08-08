@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next'
-import { execute } from '../helpers'
+import { execute } from '../_helpers'
 
-async function list(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   let { emailprefix = null, status = 'not-success', page = 0, limit = 13 } = req.body
   const offset = parseInt(page) * parseInt(limit)
   if (!status) status = 'not-success'
@@ -9,4 +9,3 @@ async function list(req: NextApiRequest, res: NextApiResponse) {
   res.status(200).json(rows)
 }
 
-export default list

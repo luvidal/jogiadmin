@@ -15,7 +15,7 @@ const Tasks = () => {
   const limit = 13
 
   useEffect(() => {
-    post('tasks', { emailprefix, status, page, limit }).then(setTasks)
+    post(`tasks`, { emailprefix, status, page, limit }).then(setTasks)
   }, [emailprefix, status, page])
 
   useEffect(() => {
@@ -23,7 +23,7 @@ const Tasks = () => {
     if (!needsRefresh) return
 
     const interval = setInterval(() => {
-      post('tasks', { emailprefix, status, page, limit }).then(setTasks)
+      post(`tasks`, { emailprefix, status, page, limit }).then(setTasks)
     }, 3000)
 
     return () => clearInterval(interval)
@@ -49,9 +49,9 @@ const Tasks = () => {
         setStatus={setStatus}
         setPage={setPage}
       />
-      <TasksTable tasks={tasks} reprocess={reprocess} manual={manual}/>
+      <TasksTable tasks={tasks} reprocess={reprocess} manual={manual} />
       <Pager page={page} setPage={setPage} hasNext={tasks.length >= limit} />
-      {manualTask && <Manual task={manualTask} onClose={() => setManualTask(null)}/>}
+      {manualTask && <Manual task={manualTask} onClose={() => setManualTask(null)} />}
     </div>
   )
 }

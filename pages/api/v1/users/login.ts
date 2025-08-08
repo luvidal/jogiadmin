@@ -1,8 +1,8 @@
 import { NextApiRequest, NextApiResponse } from 'next'
-import { execute } from '../helpers'
-import { verifyCredentialToken } from '../auth'
+import { execute } from '../_helpers'
+import { verifyCredentialToken } from './_auth'
 
-async function login(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
     const { credential } = req.body
     const payload = await verifyCredentialToken(credential)
@@ -22,5 +22,3 @@ async function login(req: NextApiRequest, res: NextApiResponse) {
     return res.status(500).json({ msg: 'Error de autenticación' })
   }
 }
-
-export default login
