@@ -27,9 +27,9 @@ export default async function handler(req: NextRequest) {
     try { parsed = JSON.parse(raw) } catch { }
 
     const { data, success, message, error } = parsed
-    const failText = error || message || raw
 
     if (!r.ok || success === false || !data) {
+      const failText = String(error || message || raw)
       await execute('_docbroker.sp_update_task_status', {
         taskid, success: 0, retries, returntext: failText.slice(0, 500),
       })

@@ -48,7 +48,7 @@ export async function execute<T = any>(procedure: string, params?: Record<string
   }
 }
 
-export const uploadS3 = async (userid: string, doctypeid: string, filename: string, base64: string): Promise<void> => {
+export const uploadS3 = async (userid: string, doctypeid: string, filename: string, base64: string): Promise<string> => {
   const buffer = Buffer.from(base64, 'base64')
   const mimetype = mime.lookup(filename) || 'application/pdf'
   const size = buffer.length
@@ -57,14 +57,15 @@ export const uploadS3 = async (userid: string, doctypeid: string, filename: stri
   const lastmodified = new Date().toISOString()
   const values = { userid, uploadmethod, filename, mimetype, doctypeid, lastmodified, size, sizekb }
 
-  const [{ cloudfileid }] = await execute('_cloud.sp_create_file', values)
+  const [{ cloudid }] = await execute('_cloud.sp_create_file', values)
 
   const { S3Client, PutObjectCommand } = await import('@aws-sdk/client-s3')
   const s3 = new S3Client({})
   await s3.send(new PutObjectCommand({
     Bucket: 'jogi-files',
-    Key: `${userid}/${cloudfileid}`,
+    Key: `${userid}/${cloudid}`,
     Body: buffer,
     ContentType: mimetype,
   }))
+  return cloudid
 }
