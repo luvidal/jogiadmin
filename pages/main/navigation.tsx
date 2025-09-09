@@ -27,9 +27,9 @@ const Navigation = ({ selected, setContent, onToggleMenu }: any) => {
       </div>
 
       <div className='flex flex-1 items-center justify-start lg:justify-end me-6 lg:me-12'>
-        {pages.map(item =>
+        {pages?.map(item =>
           item.show &&
-            <MnuBtn key={item.id} icon={item.icon} text={item.label} selected={selected === item.id} onClick={() => handleClick(item.id)} />
+          <MnuBtn key={item.id} icon={item.icon} text={item.label} selected={selected === item.id} onClick={() => handleClick(item.id)} />
         )}
       </div>
 

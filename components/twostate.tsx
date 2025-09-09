@@ -6,7 +6,7 @@ type Props<T extends string> = {
   className?: string
 }
 
-const TwoState = <T extends string>({ value, options, onChange, className = ''}: Props<T>) => {
+const TwoState = <T extends string>({ value, options, onChange, className = '' }: Props<T>) => {
 
   const keys = Object.keys(options) as T[]
   const handleToggle = () => {
@@ -19,7 +19,7 @@ const TwoState = <T extends string>({ value, options, onChange, className = ''}:
       onClick={handleToggle}
       className={`flex h-8 rounded border border-gray-300 text-sm font-medium overflow-hidden ${className}`}
     >
-      {keys.map((key, i) => {
+      {keys?.map((key, i) => {
         const active = value === key
         return (
           <div

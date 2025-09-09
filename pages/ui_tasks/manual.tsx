@@ -84,7 +84,7 @@ const Manual = ({ task, onClose }: Props) => {
         )}
         <hr />
         <div className='flex justify-between'>
-          {Object.entries(context).map(([key, value]) => {
+          {Object.entries(context)?.map(([key, value]) => {
             const isGroup = ['claveunica', 'rut', 'documento'].includes(key.toLowerCase())
             const width = isGroup ? 'w-[calc(33%-1rem)]' : 'w-full'
 

@@ -30,7 +30,7 @@ const Tasks = () => {
   }, [tasks, emailprefix, status, page])
 
   const reprocess = async (taskid: string) => {
-    setTasks(tasks.map(t => t.taskid === taskid ? { ...t, status: 'pending' } : t))
+    setTasks(tasks?.map(t => t.taskid === taskid ? { ...t, status: 'pending' } : t))
     await patch(`tasks/${taskid}/reprocess`)
   }
 
