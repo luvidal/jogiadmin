@@ -2,11 +2,11 @@ import { NextRequest, NextResponse } from 'next/server'
 import { execute, uploadS3 } from '../_helpers'
 
 export default async function handler(req: NextRequest) {
-  const [taskRef] = await execute('_docbroker.sp_run_task')
+  const [taskRef] = await execute('_tasks.sp_run_task')
   if (!taskRef) return NextResponse.json({ status: 'no-task' }, { status: 204 })
 
   const taskid = taskRef.taskid
-  const [task] = await execute('_docbroker.sp_get_task', { taskid })
+  const [task] = await execute('_tasks.sp_get_task', { taskid })
   if (!task) return NextResponse.json({ status: 'not-found' }, { status: 204 })
 
   const { userid, doctypeid, script, retries, context, filename } = task
@@ -30,21 +30,21 @@ export default async function handler(req: NextRequest) {
 
     if (!r.ok || success === false || !data) {
       const failText = String(error || message || raw)
-      await execute('_docbroker.sp_update_task_status', {
+      await execute('_tasks.sp_update_task_status', {
         taskid, success: 0, retries, returntext: failText.slice(0, 500),
       })
       return NextResponse.json({ status: 'fail', error: failText }, { status: 500 })
     }
 
     await uploadS3(userid, doctypeid, filename, data)
-    await execute('_docbroker.sp_update_task_status', {
+    await execute('_tasks.sp_update_task_status', {
       taskid, success: 1, retries: 0, returntext: `Uploaded ${filename}`,
     })
 
     return NextResponse.json({ status: 'ok', filename })
   } catch (err: any) {
     const msg = err?.message || String(err)
-    await execute('_docbroker.sp_update_task_status', {
+    await execute('_tasks.sp_update_task_status', {
       taskid, success: 0, retries, returntext: msg.slice(0, 500),
     })
     return NextResponse.json({ status: 'error', error: msg }, { status: 500 })
